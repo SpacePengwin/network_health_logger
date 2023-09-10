@@ -24,7 +24,7 @@ CURRENT_PLATFORM = platform.system()
 logger.info(f"Operating System: {CURRENT_PLATFORM}")
 
 
-def run_iperf(target: str):
+def run_iperf(target: str, port: int=None):
     """
     The run_iperf function runs the iperf command on a target host and returns the transfer value and bandwidth value.
 
@@ -39,8 +39,13 @@ def run_iperf(target: str):
         raise FailedToParseIperfResults
 
     logger.info(f"Starting iperf process with target: {target}...")
-
-    command = ["iperf", "-c", target, "-f", "M"]  # Ensure we get consistent unit: `megabyte`
+    if CURRENT_PLATFORM == "Windows":
+        command = ["iperf2", "-c", target, "-w", "128K", "-f", "M"]
+    else:
+        command = ["iperf", "-c", target, "-f", "M"]
+    if port is not None:
+        logger.info(f"Port is specified, appending: `-p {port}`")
+        command.extend(["-p", port])
 
     proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = proc.communicate()

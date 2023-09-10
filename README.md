@@ -31,6 +31,10 @@ In order to use this tool, you must meet the following requirements:
         ```
         brew install iperf
         ```
+    4. Install `iperf` on Windows (Chocolatey)
+        ```
+        choco install iperf2
+        ```
 
 3. `Python3.6+`
 4. `requests` PyPi package
@@ -80,12 +84,16 @@ Arguments:
   --disable-datadog-submit (optional)
                         Specify this argument to bypass submitting the results
                         to Datadog. Default = False
+  --local-iperf-port LOCAL_IPERF_PORT
+                        Specify the port to use for the local iperf test. Default = None
+  --remote-iperf-port REMOTE_IPERF_PORT
+                        Specify the port to use for the remote iperf test. Default = None
 ```
 
 
 Example usage to run all tests:
 ```
-$ python3 network_health_logger/src/network_health.py --iperf-host 192.168.1.2 --remote-iperf-host 35.35.35.35 --ping-host 192.168.1.1 --remote-ping-host 8.8.8.8
+$ python3 network_health_logger/src/network_health.py --iperf-host 192.168.1.2 --remote-iperf-host atl.speedtest.clouvider.net --remote-iperf-port 5200 --ping-host 192.168.1.1 --remote-ping-host 8.8.8.8
 ```
 
 This will run a test to measure ping results from `192.168.1.1` (local) and `8.8.8.8` (remote). The ping metrics will measure:
@@ -95,7 +103,7 @@ This will run a test to measure ping results from `192.168.1.1` (local) and `8.8
 4. Standard Deviation Latency (milliseconds)
 5. Packet Loss (percentage)
 
-This will also run a test to measure the bandwidth from a local iperf server: `192.168.1.2` and a remote iperf server: `35.35.35.35`. The iperf metrics will measure:
+This will also run a test to measure the bandwidth from a local iperf server: `192.168.1.2` and a remote iperf server: `atl.speedtest.clouvider.net` on port: `5200`. The iperf metrics will measure:
 1. Bandwidth (megabyte)
 2. Bandwidth Transfer Rate (megabyte/s)
 3. Bandwidth Interval (seconds)

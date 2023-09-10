@@ -36,6 +36,10 @@ def parse_opts():
     parser.add_argument("--disable-datadog-submit", default=False, dest="disable_datadog_submit",
                         action="store_true", help="Specify this argument to bypass submitting the results to Datadog."
                                                   " Default = False")
+    parser.add_argument("--local-iperf-port", dest="local_iperf_port", default=None,
+                        help="Specify the port to use for the local iperf test. Default = None")
+    parser.add_argument("--remote-iperf-port", dest="remote_iperf_port", default=None,
+                       help="Specify the port to use for the remote iperf test. Default = None")
 
     return parser.parse_args()
 
@@ -81,13 +85,13 @@ if __name__ == "__main__":
 
     if args.iperf_host is not None:
         logger.info("Starting local iperf test...")
-        local_iperf_results = iperf.run_iperf(args.iperf_host)
+        local_iperf_results = iperf.run_iperf(args.iperf_host, port=args.local_iperf_port)
         if dd_client is not None:
             dd_client.submit_bandwidth_data(local_iperf_results)
 
     if args.remote_iperf_host is not None:
         logger.info("Starting remote iperf test...")
-        remote_iperf_results = iperf.run_iperf(args.remote_iperf_host)
+        remote_iperf_results = iperf.run_iperf(args.remote_iperf_host, port=args.remote_iperf_port)
         if dd_client is not None:
             dd_client.submit_bandwidth_data(remote_iperf_results, local=False)
 
