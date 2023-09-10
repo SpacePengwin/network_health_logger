@@ -24,7 +24,7 @@ def generate_network_data_body(data: dict, hostname: str, test_type: str):
     metric_units = {
         "transfer_value": "megabyte",
         "bandwidth_value": "megabyte",
-        "interval_value": "megabyte",
+        "interval_value": "second",
         "packet_loss": "percent",
         "minimum_latency": "millisecond",
         "average_latency": "millisecond",
