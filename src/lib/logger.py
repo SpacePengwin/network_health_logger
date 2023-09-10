@@ -1,6 +1,7 @@
 import logging
 import os
 from datetime import datetime
+from sys import exit
 
 now = datetime.utcnow()
 date = now.strftime("%Y-%m-%d")

@@ -2,6 +2,7 @@ import argparse
 import os
 from lib.logger import generate_logger
 from lib import datadog, iperf, ping
+from sys import exit
 
 logger = generate_logger("network_health")
 
