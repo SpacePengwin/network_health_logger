@@ -16,7 +16,7 @@ pipeline {
                         sh "cp dist/network_health linux_x86/"
                         archiveArtifacts artifacts: 'linux_x86/*', fingerprint: true
                         sh "rm -rf dist"
-                        sh "rm -rf linux_86"
+                        sh "rm -rf linux_x86"
                         sh "rm -rf build"
                         sh "rm *.spec"
                         sh "rm -rf venv"
