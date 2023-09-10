@@ -14,6 +14,8 @@ pipeline {
                         sh "venv/bin/pyinstaller --onefile --noconsole src/network_health.py --name nework_health_linux_x86"
                         archiveArtifacts artifacts: 'dist/*', fingerprint: true
                         sh "rm -rf dist"
+                        sh "rm -rf build"
+                        sh "rm *.spec"
                         sh "rm -rf venv"
                     }
                 }
@@ -29,6 +31,8 @@ pipeline {
                         powershell "venv/Scripts/pyinstaller.exe --onefile --noconsole src/network_health.py --name network_health_windows_x86.exe"
                         archiveArtifacts artifacts: 'dist/*', fingerprint: true
                         powershell "Remove-Item -Recurse dist"
+                        powershell "Remove-Item -Recurse build"
+                        powershell "Remove-Item *.spec"
                         powershell "Remove-Item -Recurse venv"
                     }
                 }
@@ -43,6 +47,8 @@ pipeline {
                         sh "venv/bin/pyinstaller --onefile --noconsole src/network_health.py --name network_health_macos"
                         archiveArtifacts artifacts: 'dist/*', fingerprint: true
                         sh "rm -rf dist"
+                        sh "rm -rf build"
+                        sh "rm *.spec"
                         sh "rm -rf venv"
                     }
                 }
