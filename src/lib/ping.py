@@ -51,7 +51,12 @@ def run_ping(target: str, number_of_packets: int = 100):
     logger.info("Completed ping process, parsing output...")
     logger.debug(f"Ping output:\n {stdout}")
 
-    pattern = r"(\d+\.\d+)%\s+packet loss.*?(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)\s+ms"
+
+    if CURRENT_PLATFORM == "darwin":
+        pattern = r"(\d+\.\d+)%\s+packet loss.*?(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)\s+ms"
+    else: # unix
+        pattern = r"(\d+)% packet loss.*?min/avg/max/mdev = ([\d.]+)/([\d.]+)/([\d.]+)/([\d.]+) ms"
+
 
     # Search for the pattern in the text, ignoring whitespace and line breaks
     match = re.search(pattern, stdout, re.DOTALL | re.IGNORECASE)
