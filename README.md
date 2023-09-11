@@ -1,5 +1,5 @@
 # network_health_logger
-`network_health_logger` is a command line utility to measure ang log a device's network connection. This currently provides the following metrics for the host it runs on:  
+`network_health_logger` is a command line utility to measure and log a device's network connection. This currently provides the following metrics for the host it runs on:  
 1. Minimum Latency (milliseconds)
 2. Maximum Latency (milliseconds)
 3. Average Latency (milliseconds)
@@ -11,7 +11,7 @@
 
 Each of these metrics can be tested against a local address or a remote address.
 
-Each of these can be submitting to Datadog as a metric.
+Each of these metrics are submitted to Datadog by default.
 
 The goal is to allow this tool to run on as many hosts as possible with as little setup as neccessary. 
 
@@ -27,11 +27,11 @@ In order to use this tool, you must meet the following requirements:
         ```
         sudo yum install iperf
         ```
-    3. Install `iperf` on MacOS
+    3. Install `iperf` on MacOS (Homebrew):
         ```
         brew install iperf
         ```
-    4. Install `iperf` on Windows (Chocolatey)
+    4. Install `iperf` on Windows (Chocolatey):
         ```
         choco install iperf2
         ```
@@ -51,6 +51,8 @@ In order to use this tool, you must meet the following requirements:
     ```
     $ python3 network_health_logger/src/network_health.py
     ```
+
+Alternatively, you can download the executable on the Releases page.
 
 # Usage
 This tool will default to submitting all results to Datadog as metric values. This requires you to have your Datadog API key set as an environment variable:
