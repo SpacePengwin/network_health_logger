@@ -52,7 +52,7 @@ def run_ping(target: str, number_of_packets: int = 100):
     logger.debug(f"Ping output:\n {stdout}")
 
 
-    if CURRENT_PLATFORM == "darwin":
+    if CURRENT_PLATFORM == "Darwin":
         pattern = r"(\d+\.\d+)%\s+packet loss.*?(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)\s+ms"
     else: # unix
         pattern = r"(\d+)% packet loss.*?min/avg/max/mdev = ([\d.]+)/([\d.]+)/([\d.]+)/([\d.]+) ms"
