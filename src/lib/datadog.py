@@ -1,4 +1,5 @@
 import requests
+from requests import Response
 import logging
 from socket import gethostname
 import time
@@ -121,6 +122,24 @@ class DatadogClient:
             raise DatadogAuthenticationError(
                 f"Failed to validate Datadog credentials, status code: {response.status_code} || Error message: {response.reason}")
 
+    def submit_metric_with_retries(self, response: Response, data: dict, retries=10):
+        attempts = 0
+        if response.ok:
+            return True
+        if not response.ok:
+            if response.status_code == 403:
+                logger.error(f"Datadog reports you are unauthorized! Error: {response.json()}")
+                exit(255)
+        for attempt in range(attempts):
+            attempt = attempt + 1
+            logger.info(f"Attempting retry: {attempt}/{retries}...")
+            response = self.handle_metric_submission(data)
+            if response.ok:
+                logger.info("Successfully sent metrics!")
+                return True
+        logger.error(f"Failed to update Datadog with metric!")
+        exit(1)
+
     def handle_metric_submission(self, data):
         """
         The handle_metric_submission function is responsible for sending the metrics to Datadog.
@@ -142,11 +161,7 @@ class DatadogClient:
         })
         data = json.dumps(data)
         response = requests.post(url, headers=headers, data=data)
-        if response.ok:
-            return True
-        else:
-            logger.error(f"Failed to update Datadog with metrics, error: {response.reason}")
-            raise DatadogFailedMetricsUpdate()
+        return response
 
     def submit_ping_network_health(self, data: dict, local: bool = True):
         """
@@ -164,7 +179,8 @@ class DatadogClient:
         logger.info("Generating data body for ping test...")
         data = generate_network_data_body(data, self.host, test_type=test_type)
         logger.info(f"Generated ping data body, submitting to endpoint as {test_type}")
-        self.handle_metric_submission(data)
+        response = self.handle_metric_submission(data)
+        self.submit_metric_with_retries(response, data)
         logger.info(f"Successfully submitted metric data for ping as {test_type}")
 
     def submit_bandwidth_data(self, data: dict, local: bool = True):
@@ -186,5 +202,6 @@ class DatadogClient:
         logger.info("Generating data body for bandwidth test...")
         data = generate_network_data_body(data, self.host, test_type=test_type)
         logger.info(f"Generated bandwidth data body, submitting to endpoint as {test_type}")
-        self.handle_metric_submission(data)
+        response = self.handle_metric_submission(data)
+        self.submit_metric_with_retries(response, data)
         logger.info(f"Successfully submitted metric data for bandwidth as {test_type}")
