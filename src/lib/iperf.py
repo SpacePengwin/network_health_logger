@@ -50,13 +50,15 @@ def run_iperf(target: str, port: int=None):
     proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = proc.communicate()
     stdout, stderr = stdout.decode(), stderr.decode()
+    print(stdout)
 
     logger.info("Completed iperf process, parsing output...")
     logger.debug(f"iperf output:\n {stdout}")
 
-    transfer_pattern = r"(\d+) MBytes"
-    bandwidth_pattern = r"(\d+) MBytes\/sec"
+    transfer_pattern = r"sec\s*(\d*.\d*) MBytes"
+    bandwidth_pattern = r"MBytes\s* (\d*.\d*)\s*MBytes\/sec"
     interval_pattern = r"-(.*\d) sec"
+
 
     transfer_match = re.search(transfer_pattern, stdout)
     bandwidth_match = re.search(bandwidth_pattern, stdout)
