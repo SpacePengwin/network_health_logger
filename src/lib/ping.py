@@ -52,10 +52,10 @@ def run_ping(target: str, number_of_packets: int = 100):
     logger.debug(f"Ping output:\n {stdout}")
 
 
-    if CURRENT_PLATFORM == "Darwin":
-        pattern = r"(\d+\.\d+)%\s+packet loss.*?(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)\s+ms"
-    else: # unix
-        pattern = r"(\d+)% packet loss.*?min/avg/max/mdev = ([\d.]+)/([\d.]+)/([\d.]+)/([\d.]+) ms"
+    if CURRENT_PLATFORM != "Windows":
+        pattern = r"\s*(\d*|\d*.\d*)%.*\n.*min\/avg\/max\/.*dev\s*=\s*(\d*.\d*|\d*)\/(\d*.\d*|\d*)\/(\d*.\d*|\d*)\/(\d*.\d*|\d*)\s*ms"
+    else:
+        pattern = r"\s*\((\d*|\d*.\d*)%.*Minimum\s*=\s*(\d*|\d*.\d*)ms.*Maximum\s*=\s*(\d*|\d*.\d*)ms.*Average\s*=\s*(\d*|\d*.\d*)ms"
 
 
     # Search for the pattern in the text, ignoring whitespace and line breaks
