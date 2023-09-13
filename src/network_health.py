@@ -31,10 +31,10 @@ def parse_opts():
     parser.add_argument("--remote-ping-host", dest="remote_ping_host", required=False, default=None,
                         help="Specify a remote host address to run a ping test against. If not specified, the test "
                              "will not run.")
-    parser.add_argument("--number-of-packets", dest="number_of_packets", required=False, default=100,
+    parser.add_argument("-n", "--number-of-packets", dest="number_of_packets", required=False, default=100,
                         help="Specify a number of packets to use for the ping tests. This value is the same for both "
                              "local and remote ping tests. Default = 100 packets")
-    parser.add_argument("--disable-datadog-submit", default=False, dest="disable_datadog_submit",
+    parser.add_argument("-dd", "--disable-datadog-submit", default=False, dest="disable_datadog_submit",
                         action="store_true", help="Specify this argument to bypass submitting the results to Datadog."
                                                   " Default = False")
     parser.add_argument("--local-iperf-port", dest="local_iperf_port", default=None,
