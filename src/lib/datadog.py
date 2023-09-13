@@ -123,14 +123,13 @@ class DatadogClient:
                 f"Failed to validate Datadog credentials, status code: {response.status_code} || Error message: {response.reason}")
 
     def submit_metric_with_retries(self, response: Response, data: dict, retries=10):
-        attempts = 0
         if response.ok:
             return True
         if not response.ok:
             if response.status_code == 403:
                 logger.error(f"Datadog reports you are unauthorized! Error: {response.json()}")
                 exit(255)
-        for attempt in range(attempts):
+        for attempt in range(retries):
             attempt = attempt + 1
             logger.info(f"Attempting retry: {attempt}/{retries}...")
             response = self.handle_metric_submission(data)
