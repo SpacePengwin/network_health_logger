@@ -62,12 +62,14 @@ def run_ping(target: str, number_of_packets: int = 100):
     match = re.search(pattern, stdout, re.DOTALL | re.IGNORECASE)
 
     if match:
+        stddev_latency = 0
         logger.info("Found pattern matches within ping results!")
         packet_loss = match.group(1)
         min_latency = match.group(2)
         avg_latency = match.group(3)
         max_latency = match.group(4)
-        stddev_latency = match.group(5)
+        if CURRENT_PLATFORM != "Windows":
+            stddev_latency = match.group(5)
 
         results = {
             "packet_loss": packet_loss,
