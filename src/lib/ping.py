@@ -55,7 +55,7 @@ def run_ping(target: str, number_of_packets: int = 100):
     if CURRENT_PLATFORM != "Windows":
         pattern = r"\s*(\d*|\d*.\d*)%.*\n.*min\/avg\/max\/.*dev\s*=\s*(\d*.\d*|\d*)\/(\d*.\d*|\d*)\/(\d*.\d*|\d*)\/(\d*.\d*|\d*)\s*ms"
     else:
-        pattern = r"\s*\((\d*|\d*.\d*)%.*Minimum\s*=\s*(\d*|\d*.\d*)ms.*Maximum\s*=\s*(\d*|\d*.\d*)ms.*Average\s*=\s*(\d*|\d*.\d*)ms"
+        pattern = r"\((\d*)%.*\n.*\n.*Minimum\s*=\s*(\d*|\d*.\d*)ms.*Maximum\s*=\s*(\d*|\d*.\d*)ms.*Average\s*=\s*(\d*|\d*.\d*)ms"
 
 
     # Search for the pattern in the text, ignoring whitespace and line breaks
