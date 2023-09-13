@@ -53,27 +53,29 @@ def run_iperf(target: str, port: int=None):
     print(stdout)
 
     logger.info("Completed iperf process, parsing output...")
-    logger.debug(f"iperf output:\n {stdout}")
 
     transfer_pattern = r"sec\s*(\d*.\d*) MBytes"
     bandwidth_pattern = r"MBytes\s* (\d*.\d*)\s*MBytes\/sec"
     interval_pattern = r"-(.*\d) sec"
 
+    pattern = r"]\s*0.00-(\d*.\d*) sec\s*(\d*)\s*MBytes\s*(\d*.\d*) \s*MBytes"
 
-    transfer_match = re.search(transfer_pattern, stdout)
-    bandwidth_match = re.search(bandwidth_pattern, stdout)
-    interval_match = re.search(interval_pattern, stdout)
-
-    transfer_value = validate_iperf_results(transfer_match)
-    bandwidth_value = validate_iperf_results(bandwidth_match)
-    interval_value = validate_iperf_results(interval_match)
+    match = re.search(pattern, stdout)
+    
+    if match:
+        transfer_match = match.group(1)
+        bandwidth_match = match.group(2)
+        interval_match = match.group(3)
+    else:
+        logger.error(f"Failed to find regex match from iperf results, stdout:\n {stdout}")
+        exit(1)
 
     logger.info("Found pattern matches from iperf output!")
 
     results = {
-        "transfer_value": transfer_value,
-        "bandwidth_value": bandwidth_value,
-        "interval_value": interval_value
+        "transfer_value": transfer_match,
+        "bandwidth_value": bandwidth_match,
+        "interval_value": interval_match
     }
 
     logger.info("Results:")
