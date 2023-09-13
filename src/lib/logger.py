@@ -2,6 +2,7 @@ import logging
 import os
 from datetime import datetime
 from sys import exit
+from pathlib import Path
 
 now = datetime.utcnow()
 date = now.strftime("%Y-%m-%d")
@@ -47,7 +48,8 @@ def generate_logger(logger_name, level=logging.INFO):
     if log_path is None:
         print(f"Failed to setup logging")
         exit(255)
-    file_handler = logging.FileHandler(f'{log_path}/{date}.log')
+    log_file = Path(f"{log_path}/{date}.log")
+    file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
 
